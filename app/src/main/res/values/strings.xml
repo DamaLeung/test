@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">My Application</string>
+    <string name="edit_message">Enter a message</string>
+    <string name="button_send">Send</string>
+    <string name="password">password</string>
+    <string name="name">name</string>
+    <string name="bir">Happy Birthday</string>
+    <string name="birName">Peter!!</string>
+    <string name="first">Song</string>
+    <string name="second">Read</string>
+    <string name="third">video</string>
+</resources>
