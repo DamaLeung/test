@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/md"
+        android:title="@string/dollar" />
+    <item
+        android:id="@+id/me"
+        android:title="@string/euro" />
+    <item
+        android:id="@+id/mw"
+        android:title="@string/won" />
+    <item
+        android:id="@+id/mc"
+        android:title="@string/config" />
+</menu>

@@ -9,6 +9,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import java.text.DecimalFormat;
+
 
 public class MainActivity extends AppCompatActivity {
     TextView out;
@@ -17,23 +19,23 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        out=findViewById(R.id.output);
-        input=findViewById(R.id.input);
-        Button song=findViewById(R.id.song);
-//        song.setOnClickListener(this);
-        song.setOnClickListener(new View.OnClickListener() {
+        setContentView(R.layout.temper);
+        input=findViewById(R.id.e1);
+        out=findViewById(R.id.e2);
+        Button sub=findViewById(R.id.sub);
+        sub.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 str=input.getText().toString();
-                out.setText(str);
+                if(str.length()>0){
+                    float f=Float.valueOf(str);
+                    float res=(f-32)/1.8f;
+                    DecimalFormat decimalFormat=new DecimalFormat(".00");
+                    out.setText(decimalFormat.format(res));
+                }
             }
         });
     }
 
-//    @Override
-//    public void onClick(View view) {
-//        String str=input.getText().toString();
-//        out.setText(str);
-//    }
+
 }

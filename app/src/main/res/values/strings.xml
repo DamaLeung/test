@@ -9,4 +9,20 @@
     <string name="first">Song</string>
     <string name="second">Read</string>
     <string name="third">video</string>
+    <string name="h1">input</string>
+    <string name="tem">temperature</string>
+    <string name="h2">result:</string>
+    <string name="output">consequence</string>
+    <string name="TeamName">TeamA</string>
+    <string name="Point">0</string>
+    <string name="one">+1</string>
+    <string name="two">+2</string>
+    <string name="three">+3</string>
+    <string name="reset">reset</string>
+    <string name="dollar">dollar</string>
+    <string name="euro">euro</string>
+    <string name="won">won</string>
+    <string name="update">update</string>
+    <string name="config">config</string>
+
 </resources>
