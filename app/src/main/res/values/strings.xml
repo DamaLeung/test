@@ -23,6 +23,7 @@
     <string name="euro">euro</string>
     <string name="won">won</string>
     <string name="update">update</string>
+    <string name="check">check</string>
     <string name="config">config</string>
 
 </resources>

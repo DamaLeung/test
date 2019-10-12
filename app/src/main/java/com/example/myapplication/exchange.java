@@ -28,14 +28,14 @@ import java.io.Reader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 public class exchange extends AppCompatActivity implements View.OnClickListener,Runnable {
     Float rd;
     Float re;
     Float rw;
-    Float nrd;
-    Float nre;
-    Float nrw;
     Handler handler;
     @Override
 
@@ -46,19 +46,28 @@ public class exchange extends AppCompatActivity implements View.OnClickListener,
         handler=new Handler(){
             @Override
             public void handleMessage(Message msg) {
-                Bundle b = msg.getData();
-                rd=b.getFloat("rd");
-                re=b.getFloat("re");
-                rw=b.getFloat("rw");
+                if(msg.what==1){
+                    Bundle b = msg.getData();
+                    rd=b.getFloat("rd");
+                    re=b.getFloat("re");
+                    rw=b.getFloat("rw");
+
+                }
                 super.handleMessage(msg);
 
             }
         };
-
+        String updateDate=sp.getString("update_date","");
         rd=sp.getFloat("rateD",7.1224f);
         re=sp.getFloat("rateE",7.7883f);
         rw=sp.getFloat("rateW",168.2719f);
-
+        Date today=Calendar.getInstance().getTime();
+        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
+        String todayStr=sdf.format(today);
+        if(!todayStr.equals(updateDate)){
+            Thread t=new Thread(this);
+            t.start();
+        }
     }
 
     @Override
@@ -72,6 +81,9 @@ public class exchange extends AppCompatActivity implements View.OnClickListener,
         }else if(view.getId()==R.id.update){
             Thread t=new Thread(this);
             t.start();
+        }else if(view.getId()==R.id.check){
+            Intent list=new Intent(this,MyList.class);
+            startActivity(list);
         }
         else if(str.length()>0){
 
@@ -172,9 +184,13 @@ public class exchange extends AppCompatActivity implements View.OnClickListener,
         }
         SharedPreferences sp=getSharedPreferences("myrate", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
+        Date today=Calendar.getInstance().getTime();
+        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
+        String todayStr=sdf.format(today);
         editor.putFloat("rateD",nd);
         editor.putFloat("rateE",ne);
         editor.putFloat("rateW",nw);
+        editor.putString("update_date",todayStr);
         editor.apply();
         Message msg=handler.obtainMessage(1);
         msg.setData(b);

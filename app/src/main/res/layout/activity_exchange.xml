@@ -72,4 +72,13 @@
         android:onClick="onClick"
         android:text="@string/config"
         android:textSize="36sp" />
+
+    <Button
+        android:id="@+id/check"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:onClick="onClick"
+        android:text="@string/check"
+        android:textSize="36sp" />
 </LinearLayout>
