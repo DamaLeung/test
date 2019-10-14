@@ -1,20 +1,19 @@
 package com.example.myapplication;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -25,9 +24,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -57,10 +53,10 @@ public class exchange extends AppCompatActivity implements View.OnClickListener,
 
             }
         };
-        String updateDate=sp.getString("update_date","");
         rd=sp.getFloat("rateD",7.1224f);
         re=sp.getFloat("rateE",7.7883f);
         rw=sp.getFloat("rateW",168.2719f);
+        String updateDate=sp.getString("update_date","");
         Date today=Calendar.getInstance().getTime();
         SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
         String todayStr=sdf.format(today);
