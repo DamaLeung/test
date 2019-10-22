@@ -12,7 +12,12 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".ListClick"></activity>
+        <activity android:name=".Frag">
+
+        </activity>
+        <activity
+            android:name=".ListClick"
+            android:theme="@style/Theme.AppCompat.Dialog" />
         <activity android:name=".exchange">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

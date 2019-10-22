@@ -7,12 +7,10 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
 public class MyAdapter extends ArrayAdapter {
-    public MyAdapter(Context context, int resource, ArrayList<HashMap<String,String>> list) {
+    public MyAdapter(Context context, int resource, List<RateItem> list) {
         super(context, resource,list);
     }
 
@@ -22,11 +20,11 @@ public class MyAdapter extends ArrayAdapter {
         if(itemView==null){
             itemView= LayoutInflater.from(getContext()).inflate(R.layout.activity_my_list,parent,false);
         }
-        Map<String,String> map=(Map<String,String>) getItem(position);
+        RateItem item=(RateItem) getItem(position);
         TextView title=(TextView)itemView.findViewById(R.id.itemTitle);
         TextView detail=(TextView)itemView.findViewById(R.id.itemDetail);
-        title.setText(map.get("ItemTitle"));
-        detail.setText(map.get("ItemDetail"));
+        title.setText(item.getCurName());
+        detail.setText(item.getCurRate());
         return itemView;
     }
 

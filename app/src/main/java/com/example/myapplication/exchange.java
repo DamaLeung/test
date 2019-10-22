@@ -21,12 +21,11 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 public class exchange extends AppCompatActivity implements View.OnClickListener,Runnable {
     Float rd;
@@ -38,16 +37,22 @@ public class exchange extends AppCompatActivity implements View.OnClickListener,
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_exchange);
-        SharedPreferences sp = getSharedPreferences("myrate", Context.MODE_PRIVATE);
+        final SharedPreferences sp = getSharedPreferences("myrate", Context.MODE_PRIVATE);
         handler=new Handler(){
             @Override
             public void handleMessage(Message msg) {
                 if(msg.what==1){
-                    Bundle b = msg.getData();
-                    rd=b.getFloat("rd");
-                    re=b.getFloat("re");
-                    rw=b.getFloat("rw");
-
+                  RateManager rateManager=new RateManager(exchange.this);
+                  List<RateItem> list=new ArrayList<RateItem>();
+                  list=rateManager.listAll();
+                  rd=Float.valueOf(list.get(2).getCurRate());
+                  re=Float.valueOf(list.get(13).getCurRate());
+                  rw=100/Float.valueOf(list.get(20).getCurRate());
+                  SharedPreferences.Editor editor = sp.edit();
+                    editor.putFloat("rateD",rd);
+                    editor.putFloat("rateE",re);
+                    editor.putFloat("rateW",rw);
+                    editor.apply();
                 }
                 super.handleMessage(msg);
 
@@ -60,10 +65,10 @@ public class exchange extends AppCompatActivity implements View.OnClickListener,
         Date today=Calendar.getInstance().getTime();
         SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
         String todayStr=sdf.format(today);
-        if(!todayStr.equals(updateDate)){
+//        if(!todayStr.equals(updateDate)){
             Thread t=new Thread(this);
             t.start();
-        }
+//        }
     }
 
     @Override
@@ -154,26 +159,31 @@ public class exchange extends AppCompatActivity implements View.OnClickListener,
 
     @Override
     public void run() {
-        //获取网络数据
         String url = "http://www.usd-cny.com/icbc.htm";
         Document doc;
-        Bundle b=new Bundle();
-        Float nd=0f;
-        Float ne=0f;
-        Float nw=0f;
+        List<RateItem> list= new ArrayList<RateItem>();
         try {
             doc = Jsoup.connect(url).get();
             Element table=doc.getElementsByTag("table").first();
             Elements trs=table.getElementsByTag("tr");
-            Element d=trs.get(3);//美元
-            nd=Float.valueOf(d.getElementsByTag("td").get(1).text())/100;
-            b.putFloat("rd",nd);
-            Element e=trs.get(14);//欧元
-            ne=Float.valueOf(e.getElementsByTag("td").get(1).text())/100;
-            b.putFloat("re",ne);
-            Element w=trs.get(21);//韩元
-            nw=100/Float.valueOf(w.getElementsByTag("td").get(2).text());
-            b.putFloat("rw",nw);
+            for(int i=1;i<trs.size();i++){
+                Element td=trs.get(i);
+                Elements tds=td.getElementsByTag("td");
+                String name=tds.get(0).text();
+                String rate=tds.get(1).text();
+                if(rate.equals("--")){
+                    rate=tds.get(2).text();
+                }
+                RateItem item=new RateItem();
+                item.setCurName(name);
+                item.setCurRate(rate);
+                list.add(item);
+            }
+            RateManager rateManager=new RateManager(this);
+            rateManager.deleteAll();
+            rateManager.addAll(list);
+
+
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -183,26 +193,10 @@ public class exchange extends AppCompatActivity implements View.OnClickListener,
         Date today=Calendar.getInstance().getTime();
         SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
         String todayStr=sdf.format(today);
-        editor.putFloat("rateD",nd);
-        editor.putFloat("rateE",ne);
-        editor.putFloat("rateW",nw);
         editor.putString("update_date",todayStr);
         editor.apply();
         Message msg=handler.obtainMessage(1);
-        msg.setData(b);
         handler.sendMessage(msg);
     }
-    private String inputStream2String(InputStream inputStream) throws IOException {
-        final int bufferSize = 1024;
-        final char[] buffer = new char[bufferSize];
-        final StringBuilder out = new StringBuilder();
-        Reader in = new InputStreamReader(inputStream, "gb2312");
-        while (true) {
-            int rsz = in.read(buffer, 0, buffer.length);
-            if (rsz < 0)
-                break;
-            out.append(buffer, 0, rsz);
-        }
-        return out.toString();
-    }
+
 }
